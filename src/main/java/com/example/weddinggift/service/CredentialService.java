@@ -17,4 +17,5 @@ public interface CredentialService {
     CredentialResponseDto getCredentialByUserId(Long userId) throws  CredentialNullException;
 
     Optional<User> validateTokenAndGetUser(String token);
+
 }

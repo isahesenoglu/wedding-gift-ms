@@ -14,11 +14,10 @@ public class TokenPeriodServiceImpl implements TokenPeriodService {
     @Override
     public long getFixedRate() {
         TokenPeriod tokenPeriod = tokenPeriodRepository.findTopByOrderByInsertDateDesc();
-        System.out.println("tokenin muddeti " + tokenPeriod.getPeriod());
         if (tokenPeriod != null) {
             int periodInSecond = tokenPeriod.getPeriod();
             return periodInSecond;
         }
-        return 60000;
+        return 60 * 60 * 6; // 6 saat
     }
 }

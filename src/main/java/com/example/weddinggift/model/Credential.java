@@ -25,4 +25,11 @@ public class Credential {
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
+
+    @PrePersist
+    public void onPrePersist() {
+        if (this.insertDate == null) {
+            this.insertDate = LocalDateTime.now();
+        }
+    }
 }

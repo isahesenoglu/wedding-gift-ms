@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private CredentialRepository credentialRepository;
+    private TokenPeriodServiceImpl tokenPeriodServiceImpl;
 
     @Override
     public void createUser(User user) throws EmailAlreadyExistException {
@@ -69,6 +70,10 @@ public class UserServiceImpl implements UserService {
         credential.setToken(activeToken);
         credential.setInsertDate(LocalDateTime.now());
         credential.setUpdateDate(LocalDateTime.now());
+        System.out.println("tokenin db-den gelen saniyesi : " + tokenPeriodServiceImpl.getFixedRate());
+        System.out.println("insert_date : " + credential.getInsertDate());
+        credential.setExpirationDate(LocalDateTime.now().plusSeconds(tokenPeriodServiceImpl.getFixedRate()/1000));
+        System.out.println("expiration_date: " + credential.getExpirationDate());
         credentialRepository.save(credential);
 
         return activeToken;

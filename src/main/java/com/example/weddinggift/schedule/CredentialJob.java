@@ -25,7 +25,7 @@ public class CredentialJob {
     public void updateExpiredCredentials() {
         LocalDateTime now = LocalDateTime.now();
         List<Credential> credentials = credentialRepository.findByExpirationDateBefore(now);
-        System.out.println("Fetched credentials: " + credentials);
+        System.out.println(LocalDateTime.now() + " Fetched credentials: " + credentials);
         for (Credential credential : credentials) {
             if (credential.getExpirationDate() != null && credential.getExpirationDate().isBefore(now)) {
                 credential.setStatus(0);
