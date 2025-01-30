@@ -9,12 +9,8 @@ import com.example.weddinggift.repository.CredentialRepository;
 import com.example.weddinggift.repository.UserRepository;
 import com.example.weddinggift.service.CredentialService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,6 +21,7 @@ public class CredentialServiceImpl implements CredentialService {
 
     private CredentialRepository credentialRepository;
     private UserRepository userRepository;
+    private TokenPeriodServiceImpl tokenPeriodServiceImpl;
 
     @Override
     public String createCredential(CredentialRequestDto credentialRequestDto) throws CredentialNullException {
@@ -38,6 +35,7 @@ public class CredentialServiceImpl implements CredentialService {
         credential.setUser(user);
         credential.setInsertDate(LocalDateTime.now());
         credential.setUpdateDate(LocalDateTime.now());
+        credential.setExpirationDate(LocalDateTime.now().plusSeconds(tokenPeriodServiceImpl.getFixedRate()));
 
         Credential savedCredential = credentialRepository.save(credential);
 
@@ -60,7 +58,7 @@ public class CredentialServiceImpl implements CredentialService {
     public Optional<User> validateTokenAndGetUser(String token) {
         return credentialRepository.findByToken(token)
                 .filter(credential -> credential.getStatus() == 1 && credential.getDataStatus() == 1)
-                .map(Credential::getUser); // Tokenə bağlı olan user-i qaytar
+                .map(Credential::getUser);
     }
 
 }
